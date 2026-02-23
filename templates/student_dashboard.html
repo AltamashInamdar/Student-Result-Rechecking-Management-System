@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Marks</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container */
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        /* Heading */
+        h2, h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        /* Logout Link */
+        p a {
+            color: #dc3545;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Welcome, {{ student.name }}</h2>
+
+        <h3>Your Marks</h3>
+        <table>
+            <tr>
+                <th>Subject</th>
+                <th>Marks</th>
+            </tr>
+            <tr>
+                <td>Math</td>
+                <td>{{ student.math }}</td>
+            </tr>
+            <tr>
+                <td>Science</td>
+                <td>{{ student.science }}</td>
+            </tr>
+            <tr>
+                <td>English</td>
+                <td>{{ student.english }}</td>
+            </tr>
+            <tr>
+                <td><b>Total Marks</b></td>
+                <td><b>{{ student.total_marks }}</b></td>
+            </tr>
+            <tr>
+                <td><b>Percentage %</b></td>
+                <td><b>{{ student.percentage }}%</b></td>
+            </tr>
+        </table>
+
+        <h3>Request Rechecking</h3>
+        <form action="{{ url_for('submit_rechecking') }}" method="post">
+            <label for="subject">Select Subject:</label>
+            <select name="subject">
+                <option value="math">Math</option>
+                <option value="science">Science</option>
+                <option value="english">English</option>
+            </select>
+            <button type="submit">Request Rechecking</button>
+        </form>
+
+        <p><a href="{{ url_for('logout') }}">Logout</a></p>
+    </div>
+
+</body>
+</html>

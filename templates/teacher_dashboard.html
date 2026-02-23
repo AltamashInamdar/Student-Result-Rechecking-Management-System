@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Dashboard</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    background: linear-gradient(135deg,#eef2f3,#dbe9f4);
+    padding:20px;
+}
+
+/* ================= HEADER ================= */
+
+.profile{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background: linear-gradient(90deg,#4e73df,#1cc88a);
+    padding:15px 25px;
+    border-radius:15px;
+    color:white;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.profile h1{
+    font-size:26px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.profile-logo{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    border:2px solid white;
+}
+
+.profile-name{
+    font-size:18px;
+    font-weight:600;
+}
+
+.logout a img{
+    width:30px;
+    height:30px;
+    transition:0.3s;
+}
+
+.logout a img:hover{
+    transform:scale(1.2);
+}
+
+/* ================= UPLOAD SECTION ================= */
+
+h2{
+    margin-top:30px;
+    margin-bottom:15px;
+    color:#333;
+}
+
+.upload-form{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.upload-form label{
+    font-weight:600;
+    margin-right:5px;
+}
+
+.choosefile{
+    margin:10px 15px 10px 5px;
+    padding:5px;
+}
+
+.upload-btn{
+    background:#4e73df;
+    color:white;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.upload-btn:hover{
+    background:#2e59d9;
+    transform:scale(1.05);
+}
+
+/* ================= FLASH MESSAGES ================= */
+
+.message{
+    margin-top:15px;
+    font-weight:600;
+}
+
+.success{
+    color:green;
+}
+
+.danger{
+    color:red;
+}
+
+/* ================= FLEX CONTAINER ================= */
+
+.teacherflex{
+    display:flex;
+    gap:30px;
+    margin-top:30px;
+    flex-wrap:wrap;
+}
+
+/* ================= TABLE CARD ================= */
+
+.flex, .stude{
+    flex:1;
+    min-width:450px;
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* ================= TABLE STYLE ================= */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th, td{
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#4e73df;
+    color:white;
+}
+
+td{
+    background:#f8f9fc;
+}
+
+tr:nth-child(even) td{
+    background:#e9f0ff;
+}
+
+tr:hover td{
+    background:#d4e2ff;
+    transition:0.3s;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+    .teacherflex{
+        flex-direction:column;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="profile">
+    <h1>Teacher Dashboard</h1>
+    <div class="logo">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlFi7J6h3qDjdKM0XSNYa_i32FCG3jNPwXsg&s" class="profile-logo">
+        <span class="profile-name">Welcome, {{ current_user.username }}</span>
+        <div class="logout">
+            <a href="{{ url_for('logout') }}">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2djfwEk8eQ54h4Zue0nwpxsy6h1OTzt6wKg&s" class="profile-logo">
+            </a>
+        </div>
+    </div>
+</div>
+
+<h2>Upload Subject Files</h2>
+
+<form method="POST" enctype="multipart/form-data" class="upload-form">
+    {{ form.hidden_tag() }}
+
+    <label>Math:</label>
+    <input type="file" name="math_file" class="choosefile">
+
+    <label>Science:</label>
+    <input type="file" name="science_file" class="choosefile">
+
+    <label>English:</label>
+    <input type="file" name="english_file" class="choosefile">
+
+    <button type="submit" class="upload-btn">Upload Marks</button>
+</form>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<p class="message {{ category }}">{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="teacherflex">
+
+<div class="flex">
+<h2>Student Rechecking Requests</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Roll Number</th>
+<th>Subject</th>
+<th>Status</th>
+<th>Request Date</th>
+</tr>
+</thead>
+<tbody>
+{% for request in rechecking_requests %}
+<tr>
+<td>{{ request.id }}</td>
+<td>{{ request.name }}</td>
+<td>{{ request.roll_number }}</td>
+<td>{{ request.subject }}</td>
+<td>{{ request.status }}</td>
+<td>{{ request.request_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+<div class="stude">
+<h2>All Students' Marks</h2>
+<table>
+<thead>
+<tr>
+<th>Roll Number</th>
+<th>Name</th>
+<th>Math</th>
+<th>Science</th>
+<th>English</th>
+<th>Total</th>
+<th>Percentage</th>
+</tr>
+</thead>
+<tbody>
+{% for student in students %}
+<tr>
+<td>{{ student.roll_number }}</td>
+<td>{{ student.name }}</td>
+<td>{{ student.math or 0 }}</td>
+<td>{{ student.science or 0 }}</td>
+<td>{{ student.english or 0 }}</td>
+<td>{{ student.total_marks or 0 }}</td>
+<td>{{ "%.2f"|format(student.percentage or 0) }}%</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+</div>
+
+</body>
+</html>
